@@ -1,0 +1,8 @@
+target "CDT 8.6 with Luna SR2"
+
+with source requirements
+
+location luna "http://download.eclipse.org/releases/luna/" {
+	org.eclipse.cdt.feature.group [8.6.0,8.7.0)
+	org.eclipse.platform.feature.group [4.4.2,4.4.3)
+}
