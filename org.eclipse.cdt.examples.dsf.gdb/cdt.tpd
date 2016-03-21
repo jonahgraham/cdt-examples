@@ -1,0 +1,8 @@
+target "CDT 8.8.1 with Mars.2"
+
+with source requirements
+
+location luna "http://download.eclipse.org/releases/mars/" {
+	org.eclipse.cdt.feature.group [8.8.1,9.0.0)
+	org.eclipse.platform.feature.group [4.5.2,4.6.0)
+}
