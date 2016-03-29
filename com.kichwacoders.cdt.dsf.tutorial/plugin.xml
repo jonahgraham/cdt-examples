@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="DSF Tutorial"
+            id="com.kichwacoders.cdt.dsf.tutorial">
+      </category>
+      <view
+            name="Timers View"
+            icon="icons/timer.gif"
+            category="com.kichwacoders.cdt.dsf.tutorial"
+            class="com.kichwacoders.cdt.dsf.tutorial.timers.TimersView"
+            id="com.kichwacoders.cdt.dsf.tutorial.exercise.timers.TimersView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.category"
+            name="DSF Tutorial View Model">
+      </category>
+      <command
+            categoryId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.category"
+            id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise"
+            name="DSF Tutorial View Model Exercise">
+      </command>
+      <command
+            categoryId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.category"
+            id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution"
+            name="DSF Tutorial View Model Solution">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.kichwacoders.cdt.dsf.tutorial.viewmodel.FileBrowserCommandHandler"
+            commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise">
+      </handler>
+      <handler
+            class="com.kichwacoders.cdt.dsf.tutorial.viewmodel.solution.FileBrowserCommandHandler"
+            commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="com.kichwacoders.cdt.dsf.tutorial.menu.viewmodel"
+               label="DSF Tutorial View Model">
+            <command
+                  commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise"
+                  icon="icons/sample.gif"
+                  id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise">
+            </command>
+            <command
+                  commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution"
+                  icon="icons/sample.gif"
+                  id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.kichwacoders.cdt.dsf.tutorial.toolbar.viewmodel">
+            <command
+                  commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise"
+                  icon="icons/sample.gif"
+                  id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.exercise"
+                  tooltip="DSF Tutorial View Model Exercise">
+            </command>
+            <command
+                  commandId="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution"
+                  icon="icons/sample.gif"
+                  id="com.kichwacoders.cdt.dsf.tutorial.commands.viewmodel.solution"
+                  tooltip="DSF Tutorial View Model Solution">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+</plugin>

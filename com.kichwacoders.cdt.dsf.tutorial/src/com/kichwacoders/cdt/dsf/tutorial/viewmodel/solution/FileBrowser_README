@@ -1,0 +1,10 @@
+This package has the solutions for the View Model exercises.
+
+This package is excluded from the build path. To enable them
+and add them to the build path, do this:
+- Right-click on "solution"
+- Select Build Path -> Include
+The reason for excluding from the build path is so that you
+don't accidentally get code intermixed from the two packages.
+This allows easier copying and pasting of code from solution
+to the exercise.
