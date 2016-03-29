@@ -19,6 +19,7 @@ import org.eclipse.cdt.dsf.concurrent.RequestMonitor;
 import org.eclipse.cdt.dsf.debug.service.command.CommandCache;
 import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
 import org.eclipse.cdt.dsf.gdb.IGdbDebugConstants;
+import org.eclipse.cdt.dsf.gdb.internal.GdbPlugin;
 import org.eclipse.cdt.dsf.mi.service.IMICommandControl;
 import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
 import org.eclipse.cdt.dsf.mi.service.command.output.MIGDBVersionInfo;
@@ -33,6 +34,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IStatusHandler;
 import org.osgi.framework.BundleContext;
 
+@SuppressWarnings("restriction")
 public class GDBExtendedService extends AbstractDsfService implements IGDBExtendedFunctions {
 
 	private IMICommandControl fCommandControl;
@@ -82,7 +84,8 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 	public void notify(ICommandControlDMContext ctx, String str, RequestMonitor rm) {
 		IStatus status = new Status(
 				IStatus.INFO,
-				GDBExamplePlugin.PLUGIN_ID,
+				/* XXX: Need to use GdbPlugin so that we can use GdbStatusHandler to display popup */
+				GdbPlugin.getUniqueIdentifier(),
 				IGdbDebugConstants.STATUS_HANDLER_CODE,
 				str,
 				null);
