@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Marc Khouzam (Ericsson) - initial API and implementation
  *******************************************************************************/
@@ -19,7 +19,6 @@ import org.eclipse.cdt.dsf.concurrent.RequestMonitor;
 import org.eclipse.cdt.dsf.debug.service.command.CommandCache;
 import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
 import org.eclipse.cdt.dsf.gdb.IGdbDebugConstants;
-import org.eclipse.cdt.dsf.gdb.internal.GdbPlugin;
 import org.eclipse.cdt.dsf.mi.service.IMICommandControl;
 import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
 import org.eclipse.cdt.dsf.mi.service.command.output.MIGDBVersionInfo;
@@ -35,11 +34,11 @@ import org.eclipse.debug.core.IStatusHandler;
 import org.osgi.framework.BundleContext;
 
 public class GDBExtendedService extends AbstractDsfService implements IGDBExtendedFunctions {
-	
+
 	private IMICommandControl fCommandControl;
 	private CommandFactory fCommandFactory;
 	private CommandCache fVersionCache;
-	
+
     public GDBExtendedService(DsfSession session) {
     	super(session);
     }
@@ -53,17 +52,17 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 			}
 		});
 	}
-	
+
 	private void doInitialize(RequestMonitor rm) {
 		fCommandControl = getServicesTracker().getService(IMICommandControl.class);
 		fCommandFactory = fCommandControl.getCommandFactory();
-		
+
 		fVersionCache = new CommandCache(getSession(), fCommandControl);
 		fVersionCache.setContextAvailable(fCommandControl.getContext(), true);
 
 		register(new String[] { IGDBExtendedFunctions.class.getName() },
 				 new Hashtable<String, String>());
-		
+
 		rm.done();
 	}
 
@@ -73,7 +72,7 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 		unregister();
 		super.shutdown(rm);
 	}
-	
+
 	@Override
 	protected BundleContext getBundleContext() {
 		return GDBExamplePlugin.getBundleContext();
@@ -81,11 +80,11 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 
 	@Override
 	public void notify(ICommandControlDMContext ctx, String str, RequestMonitor rm) {
-		IStatus status = new Status( 
-				IStatus.INFO, 
-				GdbPlugin.getUniqueIdentifier(), 
-				IGdbDebugConstants.STATUS_HANDLER_CODE, 
-				str, 
+		IStatus status = new Status(
+				IStatus.INFO,
+				GDBExamplePlugin.PLUGIN_ID,
+				IGdbDebugConstants.STATUS_HANDLER_CODE,
+				str,
 				null);
 		IStatusHandler statusHandler = DebugPlugin.getDefault().getStatusHandler(status);
 		if (statusHandler != null) {
@@ -106,7 +105,7 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 
 			// Use the cache to avoid having to go to GDB more than once for a value
 			// that does not change.  No need to even clear the cache since the GDB version will never change.
-			fVersionCache.execute(factory.createCLIGDBVersion(ctx), 
+			fVersionCache.execute(factory.createCLIGDBVersion(ctx),
 					new ImmediateDataRequestMonitor<MIGDBVersionInfo>(rm) {
 				@Override
 				protected void handleSuccess() {
