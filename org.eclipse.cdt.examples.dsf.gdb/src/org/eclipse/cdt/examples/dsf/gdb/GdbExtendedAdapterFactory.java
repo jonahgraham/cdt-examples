@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Marc Khouzam (Ericsson) - initial API and implementation
  *******************************************************************************/
@@ -70,6 +70,8 @@ import org.eclipse.cdt.dsf.gdb.internal.ui.viewmodel.GdbViewModelAdapter;
 import org.eclipse.cdt.dsf.gdb.launching.GdbLaunch;
 import org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate;
 import org.eclipse.cdt.dsf.service.DsfSession;
+import org.eclipse.cdt.examples.dsf.gdb.actions.DsfShowVersionHandler;
+import org.eclipse.cdt.examples.dsf.gdb.commands.IShowVersionHandler;
 import org.eclipse.cdt.examples.dsf.gdb.viewmodel.GdbExtendedViewModelAdapter;
 import org.eclipse.cdt.ui.text.c.hover.ICEditorTextHover;
 import org.eclipse.core.runtime.IAdapterFactory;
@@ -140,25 +142,26 @@ public class GdbExtendedAdapterFactory
         final GdbSelectPrevTraceRecordCommand fSelectPrevRecordTarget;
         final GdbDebugTextHover fDebugTextHover;
         final GdbPinProvider fPinProvider;
-        
+        final DsfShowVersionHandler fDsfShowVersionHandler;
+
         SessionAdapterSet(GdbLaunch launch) {
             fLaunch = launch;
             DsfSession session = launch.getSession();
-            
+
             // register stepping controller
             fSteppingController = new SteppingController(session);
             session.registerModelAdapter(SteppingController.class, fSteppingController);
 
             fViewModelAdapter = new GdbExtendedViewModelAdapter(session, fSteppingController);
             session.registerModelAdapter(IViewerInputProvider.class, fViewModelAdapter);
-            
+
             if (launch.getSourceLocator() instanceof ISourceLookupDirector) {
                 fSourceDisplayAdapter = new DsfSourceDisplayAdapter(session, (ISourceLookupDirector)launch.getSourceLocator(), fSteppingController);
             } else {
                 fSourceDisplayAdapter = null;
             }
             session.registerModelAdapter(ISourceDisplay.class, fSourceDisplayAdapter);
-            
+
             fSteppingModeTarget = new GdbSteppingModeTarget(session);
             fStepIntoCommand = new DsfStepIntoCommand(session, fSteppingModeTarget);
             fStepIntoSelectionCommand = new DsfStepIntoSelectionCommand(session);
@@ -186,6 +189,7 @@ public class GdbExtendedAdapterFactory
             fSelectNextRecordTarget = new GdbSelectNextTraceRecordCommand(session);
             fSelectPrevRecordTarget = new GdbSelectPrevTraceRecordCommand(session);
             fPinProvider = new GdbPinProvider(session);
+            fDsfShowVersionHandler = new DsfShowVersionHandler(session);
 
             session.registerModelAdapter(ISteppingModeTarget.class, fSteppingModeTarget);
             session.registerModelAdapter(IStepIntoHandler.class, fStepIntoCommand);
@@ -214,6 +218,7 @@ public class GdbExtendedAdapterFactory
             session.registerModelAdapter(ISelectPrevTraceRecordHandler.class, fSelectPrevRecordTarget);
             session.registerModelAdapter(IPinProvider.class, fPinProvider);
             session.registerModelAdapter(IDsfStepIntoSelection.class, fStepIntoSelectionCommand);
+            session.registerModelAdapter(IShowVersionHandler.class, fDsfShowVersionHandler);
 
             fDebugModelProvider = new IDebugModelProvider() {
                 // @see org.eclipse.debug.core.model.IDebugModelProvider#getModelIdentifiers()
@@ -230,17 +235,17 @@ public class GdbExtendedAdapterFactory
              * session.
              */
             session.registerModelAdapter(ILaunch.class, fLaunch);
-            
+
             /*
              * Register debug hover adapter (bug 309001).
              */
             fDebugTextHover = new GdbDebugTextHover();
             session.registerModelAdapter(ICEditorTextHover.class, fDebugTextHover);
         }
-        
+
         void dispose() {
             DsfSession session = fLaunch.getSession();
-            
+
             fViewModelAdapter.dispose();
             session.unregisterModelAdapter(IViewerInputProvider.class);
 
@@ -276,7 +281,8 @@ public class GdbExtendedAdapterFactory
             session.unregisterModelAdapter(ISelectNextTraceRecordHandler.class);
             session.unregisterModelAdapter(ISelectPrevTraceRecordHandler.class);
             session.unregisterModelAdapter(IPinProvider.class);
-            
+            session.unregisterModelAdapter(IShowVersionHandler.class);
+
             session.unregisterModelAdapter(IDebugModelProvider.class);
             session.unregisterModelAdapter(ILaunch.class);
 
@@ -311,21 +317,21 @@ public class GdbExtendedAdapterFactory
     }
 
     /**
-     * Active adapter sets.  They are accessed using the launch instance 
-     * which owns the debug services session. 
+     * Active adapter sets.  They are accessed using the launch instance
+     * which owns the debug services session.
      */
     private static Map<GdbLaunch, SessionAdapterSet> fgLaunchAdapterSets =
         Collections.synchronizedMap(new HashMap<GdbLaunch, SessionAdapterSet>());
 
     /**
      * Map of launches for which adapter sets have already been disposed.
-     * This map (used as a set) is maintained in order to avoid re-creating an 
-     * adapter set after the launch was removed from the launch manager, but 
-     * while the launch is still being held by other classes which may 
-     * request its adapters.  A weak map is used to avoid leaking 
+     * This map (used as a set) is maintained in order to avoid re-creating an
+     * adapter set after the launch was removed from the launch manager, but
+     * while the launch is still being held by other classes which may
+     * request its adapters.  A weak map is used to avoid leaking
      * memory once the launches are no longer referenced.
      * <p>
-     * Access to this map is synchronized using the fgLaunchAdapterSets 
+     * Access to this map is synchronized using the fgLaunchAdapterSets
      * instance.
      * </p>
      */
@@ -355,8 +361,8 @@ public class GdbExtendedAdapterFactory
 
         GdbLaunch launch = (GdbLaunch)adaptableObject;
 
-        // Check for valid session.  
-        // Note: even if the session is no longer active, the adapter set 
+        // Check for valid session.
+        // Note: even if the session is no longer active, the adapter set
         // should still be returned.  This is because the view model may still
         // need to show elements representing a terminated process/thread/etc.
         DsfSession session = launch.getSession();
@@ -368,7 +374,7 @@ public class GdbExtendedAdapterFactory
 
         SessionAdapterSet adapterSet;
         synchronized(fgLaunchAdapterSets) {
-            // The adapter set for the given launch was already disposed.  
+            // The adapter set for the given launch was already disposed.
             // Return a null adapter.
             if (fgDisposedLaunchAdapterSets.containsKey(launch)) {
                 return null;
@@ -382,7 +388,7 @@ public class GdbExtendedAdapterFactory
             	// Note that we must do this here because fgDisposedLaunchAdapterSets
             	// may not already know that the launch has been removed because of a race
             	// condition with the caller which is also processing a launchRemoved method.
-            	// Bug 334687 
+            	// Bug 334687
             	if (session.isActive() == false) {
             		return null;
             	}
@@ -390,12 +396,13 @@ public class GdbExtendedAdapterFactory
                 fgLaunchAdapterSets.put(launch, adapterSet);
             }
         }
-        
+
         // Returns the adapter type for the launch object.
         if (adapterType.equals(IElementContentProvider.class)) return adapterSet.fViewModelAdapter;
         else if (adapterType.equals(IModelProxyFactory.class)) return adapterSet.fViewModelAdapter;
         else if (adapterType.equals(IColumnPresentationFactory.class)) return adapterSet.fViewModelAdapter;
         else if (adapterType.equals(ISuspendTrigger.class)) return adapterSet.fSuspendTrigger;
+        else if (adapterType.equals(IShowVersionHandler.class)) return adapterSet.fDsfShowVersionHandler;
         else return null;
     }
 
@@ -404,7 +411,7 @@ public class GdbExtendedAdapterFactory
     public Class[] getAdapterList() {
         return new Class[] {
             IElementContentProvider.class, IModelProxyFactory.class, ISuspendTrigger.class,
-            IColumnPresentationFactory.class,
+            IColumnPresentationFactory.class, IShowVersionHandler.class,
             };
     }
 
@@ -426,9 +433,9 @@ public class GdbExtendedAdapterFactory
     @Override
     public void launchesAdded(ILaunch[] launches) {
     }
-    
+
     @Override
     public void launchesChanged(ILaunch[] launches) {
     }
-    
+
 }
