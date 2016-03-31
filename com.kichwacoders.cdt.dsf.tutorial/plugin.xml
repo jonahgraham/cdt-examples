@@ -82,4 +82,57 @@
          </toolbar>
       </menuContribution>
    </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.kichwacoders.cdt.dsf.tutorial.timers.SpyTimersView"
+            id="com.kichwacoders.cdt.dsf.tutorial.timers.spy.view"
+            name="Timers Spy"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.tutorial.timers.SpyToggleHandler"
+            id="com.kichwacoders.cdt.dsf.tutorial.timers.spy.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.tutorial.timers.spy.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.tutorial.timers.spy.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.tutorial.timers.spy.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
 </plugin>
