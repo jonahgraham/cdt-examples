@@ -16,6 +16,7 @@ import org.eclipse.cdt.dsf.concurrent.DataRequestMonitor;
 import org.eclipse.cdt.dsf.concurrent.ImmediateDataRequestMonitor;
 import org.eclipse.cdt.dsf.concurrent.ImmediateRequestMonitor;
 import org.eclipse.cdt.dsf.concurrent.RequestMonitor;
+import org.eclipse.cdt.dsf.debug.service.IRunControl.ISuspendedDMEvent;
 import org.eclipse.cdt.dsf.debug.service.command.CommandCache;
 import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
 import org.eclipse.cdt.dsf.gdb.IGdbDebugConstants;
@@ -24,6 +25,7 @@ import org.eclipse.cdt.dsf.mi.service.IMICommandControl;
 import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
 import org.eclipse.cdt.dsf.mi.service.command.output.MIGDBVersionInfo;
 import org.eclipse.cdt.dsf.service.AbstractDsfService;
+import org.eclipse.cdt.dsf.service.DsfServiceEventHandler;
 import org.eclipse.cdt.dsf.service.DsfSession;
 import org.eclipse.cdt.examples.dsf.gdb.GDBExamplePlugin;
 import org.eclipse.cdt.examples.dsf.gdb.service.command.GdbExtendedCommandFactory_6_8;
@@ -62,7 +64,9 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 		fVersionCache = new CommandCache(getSession(), fCommandControl);
 		fVersionCache.setContextAvailable(fCommandControl.getContext(), true);
 
-		register(new String[] { IGDBExtendedFunctions.class.getName() },
+        getSession().addServiceEventListener(this, null);
+
+        register(new String[] { IGDBExtendedFunctions.class.getName() },
 				 new Hashtable<String, String>());
 
 		rm.done();
@@ -72,6 +76,7 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 	@Override
 	public void shutdown(RequestMonitor rm) {
 		unregister();
+        getSession().removeServiceEventListener(this);
 		super.shutdown(rm);
 	}
 
@@ -120,6 +125,14 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 					NOT_SUPPORTED, "Not supported", null)); //$NON-NLS-1$
 		}
 	}
+
+    @DsfServiceEventHandler 
+    public void eventDispatched(ISuspendedDMEvent e) {
+    	// For the purpose of the example, to learn events and to know when
+    	// you can clear the cache, clear the cache unnecessarily on suspend
+    	// events
+    	fVersionCache.reset();
+    }
 
 	@Override
 	public void canGetVersion(ICommandControlDMContext ctx, DataRequestMonitor<Boolean> rm) {
