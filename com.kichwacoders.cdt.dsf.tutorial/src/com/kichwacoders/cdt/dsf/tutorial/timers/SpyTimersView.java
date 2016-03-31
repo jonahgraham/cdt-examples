@@ -9,8 +9,6 @@
 
 package com.kichwacoders.cdt.dsf.tutorial.timers;
 
-import org.eclipse.cdt.dsf.service.DsfServicesTracker;
-import org.eclipse.cdt.dsf.service.DsfSession;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -28,7 +26,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 import com.kichwacoders.cdt.dsf.tutorial.internal.TutorialPlugin;
-import com.kichwacoders.cdt.dsf.tutorial.timers.TimerService.TimerDMContext;
 
 public class SpyTimersView extends ViewPart {
 
@@ -102,7 +99,6 @@ public class SpyTimersView extends ViewPart {
 
 	private void startPollingJob() {
 		fPollingJob = new Job("Frame Spy Polling Job") {
-			int counter = 0;
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
@@ -130,36 +126,7 @@ public class SpyTimersView extends ViewPart {
 			}
 			
 			private void doWork() {
-
-				// Get the session. For purposes of tutorial, we assume there is only one session
-				DsfSession session = DsfSession.getActiveSessions()[0];
-				String sessionId = session.getId();
-
-				// Get Stack service using a DSF services tracker object
-				// TODO: Create a new DsfServicesTracker (pass in Activator.getBundleContext())
-				DsfServicesTracker tracker = new DsfServicesTracker(TutorialPlugin.getBundleContext(), sessionId);	
-				final TimerService timerService = tracker.getService(TimerService.class);
-				tracker.dispose(); //must dispose or could have a service reference leak
-				
-				session.getExecutor().execute(new Runnable() {
-					
-					@Override
-					public void run() {
-						StringBuilder sb = new StringBuilder();
-						TimerDMContext[] timers = timerService.getTimers();
-						for (TimerDMContext timerDMContext : timers) {
-							int timerValue = timerService.getTimerValue(timerDMContext);
-							sb.append("Timer " + timerDMContext + " = " + timerValue + "\n");
-						}
-						Display.getDefault().asyncExec(new Runnable() {
-							
-							@Override
-							public void run() {
-								fLogText.setText(sb.toString());
-							}
-						});
-					}
-				});
+				// TODO add the code here
 			}
 		};
 		fPollingJob.schedule();
