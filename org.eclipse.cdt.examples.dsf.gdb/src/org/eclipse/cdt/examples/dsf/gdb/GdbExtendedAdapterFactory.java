@@ -313,6 +313,7 @@ public class GdbExtendedAdapterFactory
             fSelectNextRecordTarget.dispose();
             fSelectPrevRecordTarget.dispose();
             fPinProvider.dispose();
+            fDsfShowVersionHandler.dispose();
         }
     }
 
