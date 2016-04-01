@@ -9,22 +9,12 @@
 
 package com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling;
 
-import org.eclipse.cdt.dsf.concurrent.DataRequestMonitor;
-import org.eclipse.cdt.dsf.concurrent.DsfRunnable;
-import org.eclipse.cdt.dsf.datamodel.IDMContext;
-import org.eclipse.cdt.dsf.debug.service.IStack;
-import org.eclipse.cdt.dsf.debug.service.IStack.IFrameDMContext;
-import org.eclipse.cdt.dsf.debug.service.IStack.IFrameDMData;
-import org.eclipse.cdt.dsf.service.DsfServicesTracker;
-import org.eclipse.cdt.dsf.service.DsfSession;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -44,6 +34,7 @@ public class FrameSpyPollingView extends ViewPart {
 	private MenuManager fMenuManager;
 	private StyledText fLogText;
 	private Job fPollingJob;
+	private int counter;
 
 	public FrameSpyPollingView() {
 	}
@@ -146,81 +137,47 @@ public class FrameSpyPollingView extends ViewPart {
 	}
 	
 	private void doWork() {
-		// Get the debug selection to know what the user is looking at in the Debug view
-		IAdaptable context = DebugUITools.getDebugContext();
-		if (context == null) {
-			return;
-		}
-
-		// Extract the data model context to use with the DSF services
-		IDMContext dmcontext = (IDMContext) context.getAdapter(IDMContext.class);
-		if (dmcontext == null) {
-			// Not dealing with a DSF session
-			return;
-		}
-
-		// Extract DSF session id from the DM context
-		String sessionId = dmcontext.getSessionId();
-		// Get the full DSF session to have access to the DSF executor
-		DsfSession session = DsfSession.getSession(sessionId);
-		if (session == null) {
-			// It could be that this session is no longer active
-			return;
-		}
-
-		session.getExecutor().submit(new DsfRunnable() {
+		// Global TODO: Replace printing the counter with printing <method:line> for the current frame
+		//              by doing the steps shown further down.
+		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				// Get Stack service using a DSF services tracker object
-				DsfServicesTracker tracker = new DsfServicesTracker(TutorialPlugin.getBundleContext(), sessionId);
-				IStack stackService = tracker.getService(IStack.class);
-				// Don't forgot to dispose of a tracker before it does out of scope
-				tracker.dispose();
-
-				if (stackService == null) {
-					// Stack service not available.  The debug session
-					// is probably terminating.
-					return;
-				}
-
-				// Get the full DSF session to have access to the DSF executor
-				stackService.getTopFrame(dmcontext, new DataRequestMonitor<IFrameDMContext>(session.getExecutor(), null) {
-					@Override
-					protected void handleSuccess() {
-						// The service called 'handleSuccess()' so we know there is no error.
-						IFrameDMContext frame = getData();
-						// We have a frame context.  It is just a 'pointer' though.
-						// We need to get the data associated with it.
-						stackService.getFrameData(frame, new DataRequestMonitor<IFrameDMData>(session.getExecutor(), null) {
-							@Override
-							protected void handleSuccess() {
-								// We have the frame data, let's print the method name and line number
-								final IFrameDMData frameData = getData();
-
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										if (fLogText.getText().length() > MAX_LOG_SIZE) {
-											// Clear half the log when too big
-											fLogText.setText(fLogText.getText().substring(MAX_LOG_SIZE));
-										}
-										// Pre-pend the current method:line to the log
-										fLogText.setText(
-												frameData.getFunction() + ":" + frameData.getLine() + "\n" +
-														fLogText.getText());
-									}
-								});								
-							}
-						});
-					}
-					
-					@Override
-					protected void handleError() {
-						// Ignore errors when we select elements
-						// that don't contain frames
-					}
-				});	
+				fLogText.setText(Integer.toString(counter));
 			}
-		});	
+		});
+		counter++;
+
+		// Get the debug selection to know what the user is looking at in the Debug view				
+		// TODO: Obtain current debug context using DebugUITools.getDebugContext();
+
+		// Extract the data model context to use with the DSF services
+		// TODO: Convert debug context to DSF context using: getAdapter(IDMContext.class)
+		
+		// Extract DSF session id from the DM context
+		// TODO: Get DsfSession using DsfSession.getSession
+		//       You can find the session id in the IDMContext
+
+		// Get Stack service using a DSF services tracker object
+		// TODO: Create a new DsfServicesTracker (pass in Activator.getBundleContext())
+		
+		// TODO: Get the IStack service using DsfServicesTracker.getService(IStack.class)
+
+		// TODO: Don't forget to dispose of the tracker before it goes out of scope
+
+		// Get the context for the top frame
+		// TODO: Look at IStack.java and find the API to get the top frame
+		// TODO: Call that method using the IDMContext you have already.
+		//       You can use 'null' for the parentRequest monitor
+		//       You can find the DSF Executor using the DsfSession and getExecutor()
+		
+		// TODO: Override handleSuccess() which is the callback
+		//       The result will be in getData()
+		
+		// We now have a pointer to the top frame, but no other information about it
+		// Call the stack service to fetch that information so we can print it
+		// TODO: Look at IStack.java and find the API to get the data associated with a frame
+		
+		// TODO: From the handleSucess() callback extract from the frame data
+		//       the 'method name' and the 'line number' and set it as the text of fToggledStateLbl
 	}
 }
