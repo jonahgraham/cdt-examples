@@ -135,4 +135,112 @@
       </menuContribution>
    </extension>
    
+
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.FrameSpyEventsView"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.view"
+            name="DSF-GDB Frame Spy with Events"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.FrameSpyEventsHandler"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
+
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.FrameSpyPollingView"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view"
+            name="DSF-GDB Frame Spy with Polling"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.FrameSpyPollingHandler"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
 </plugin>
