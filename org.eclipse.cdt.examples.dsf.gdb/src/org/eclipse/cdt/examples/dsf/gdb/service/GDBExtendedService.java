@@ -13,14 +13,22 @@ package org.eclipse.cdt.examples.dsf.gdb.service;
 import java.util.Hashtable;
 
 import org.eclipse.cdt.dsf.concurrent.DataRequestMonitor;
+import org.eclipse.cdt.dsf.concurrent.ImmediateDataRequestMonitor;
 import org.eclipse.cdt.dsf.concurrent.ImmediateRequestMonitor;
 import org.eclipse.cdt.dsf.concurrent.RequestMonitor;
+import org.eclipse.cdt.dsf.debug.service.IRunControl.ISuspendedDMEvent;
+import org.eclipse.cdt.dsf.debug.service.command.CommandCache;
 import org.eclipse.cdt.dsf.debug.service.command.ICommandControlService.ICommandControlDMContext;
 import org.eclipse.cdt.dsf.gdb.IGdbDebugConstants;
 import org.eclipse.cdt.dsf.gdb.internal.GdbPlugin;
+import org.eclipse.cdt.dsf.mi.service.IMICommandControl;
+import org.eclipse.cdt.dsf.mi.service.command.CommandFactory;
+import org.eclipse.cdt.dsf.mi.service.command.output.MIGDBVersionInfo;
 import org.eclipse.cdt.dsf.service.AbstractDsfService;
+import org.eclipse.cdt.dsf.service.DsfServiceEventHandler;
 import org.eclipse.cdt.dsf.service.DsfSession;
 import org.eclipse.cdt.examples.dsf.gdb.GDBExamplePlugin;
+import org.eclipse.cdt.examples.dsf.gdb.service.command.GdbExtendedCommandFactory_6_8;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,6 +39,9 @@ import org.osgi.framework.BundleContext;
 @SuppressWarnings("restriction")
 public class GDBExtendedService extends AbstractDsfService implements IGDBExtendedFunctions {
 
+	private IMICommandControl fCommandControl;
+	private CommandFactory fCommandFactory;
+	private CommandCache fVersionCache;
 
     public GDBExtendedService(DsfSession session) {
     	super(session);
@@ -47,6 +58,13 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 	}
 
 	private void doInitialize(RequestMonitor rm) {
+		fCommandControl = getServicesTracker().getService(IMICommandControl.class);
+		fCommandFactory = fCommandControl.getCommandFactory();
+
+		fVersionCache = new CommandCache(getSession(), fCommandControl);
+		fVersionCache.setContextAvailable(fCommandControl.getContext(), true);
+
+        getSession().addServiceEventListener(this, null);
 
         register(new String[] { IGDBExtendedFunctions.class.getName() },
 				 new Hashtable<String, String>());
@@ -90,14 +108,34 @@ public class GDBExtendedService extends AbstractDsfService implements IGDBExtend
 
 	@Override
 	public void getVersion(ICommandControlDMContext ctx, final DataRequestMonitor<String> rm) {
-		//rm.setStatus(new Status(IStatus.ERROR, GDBExamplePlugin.PLUGIN_ID,
-		//		NOT_SUPPORTED, "Not supported", null)); //$NON-NLS-1$
-		rm.done("Version number of GDB will be obtained in the next exercise"); //$NON-NLS-1$
+		if (fCommandFactory instanceof GdbExtendedCommandFactory_6_8) {
+			GdbExtendedCommandFactory_6_8 factory = (GdbExtendedCommandFactory_6_8)fCommandFactory;
+
+			// Use the cache to avoid having to go to GDB more than once for a value
+			// that does not change.  No need to even clear the cache since the GDB version will never change.
+			fVersionCache.execute(factory.createCLIGDBVersion(ctx),
+					new ImmediateDataRequestMonitor<MIGDBVersionInfo>(rm) {
+				@Override
+				protected void handleSuccess() {
+					rm.done(getData().getVersion());
+				}
+			});
+		} else {
+			rm.done(new Status(IStatus.ERROR, GDBExamplePlugin.PLUGIN_ID,
+					NOT_SUPPORTED, "Not supported", null)); //$NON-NLS-1$
+		}
 	}
 
+    @DsfServiceEventHandler 
+    public void eventDispatched(ISuspendedDMEvent e) {
+    	// For the purpose of the example, to learn events and to know when
+    	// you can clear the cache, clear the cache unnecessarily on suspend
+    	// events
+    	fVersionCache.reset();
+    }
 
 	@Override
 	public void canGetVersion(ICommandControlDMContext ctx, DataRequestMonitor<Boolean> rm) {
-		rm.done(true);
+		rm.done(fCommandFactory instanceof GdbExtendedCommandFactory_6_8);
 	}
 }
