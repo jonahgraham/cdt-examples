@@ -53,7 +53,9 @@ import com.kichwacoders.cdt.dsf.tutorial.timers.TimersVMProvider.ViewLayout;
 @SuppressWarnings("restriction")
 public class TimersView extends ViewPart {
     
-    /** Timers view ID */
+    public static final String TIMERS_DSF_EXAMPLE_SESSION_OWNER_ID = "Timers(DSF Example)";
+
+	/** Timers view ID */
     public static final String ID_VIEW_TIMERS = "org.eclipse.cdt.examples.dsf.TimersView";
     
     /** Asynchronous tree viewer from the platform debug.ui plugin. */
@@ -107,7 +109,7 @@ public class TimersView extends ViewPart {
         // as well as a session and a services tracker for managing references 
         // to services.
         fExecutor = new DefaultDsfExecutor();
-        fSession = DsfSession.startSession(fExecutor, "Timers(DSF Example)"); 
+        fSession = DsfSession.startSession(fExecutor, TIMERS_DSF_EXAMPLE_SESSION_OWNER_ID); 
         fServices = new DsfServicesTracker(
             TutorialPlugin.getBundleContext(), fSession.getId());
 

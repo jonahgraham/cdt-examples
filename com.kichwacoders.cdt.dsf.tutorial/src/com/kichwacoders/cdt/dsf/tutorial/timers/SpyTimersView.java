@@ -68,6 +68,7 @@ public class SpyTimersView extends ViewPart {
 	public void dispose() {
 		super.dispose();
 		fMenuManager.dispose();
+		cancelPollingJob();
 	}
 
 	public boolean getToggledState() {
@@ -98,7 +99,7 @@ public class SpyTimersView extends ViewPart {
 	}
 
 	private void startPollingJob() {
-		fPollingJob = new Job("Frame Spy Polling Job") {
+		fPollingJob = new Job("Timers Spy Polling Job") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {

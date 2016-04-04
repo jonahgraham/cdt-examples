@@ -87,6 +87,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
             class="com.kichwacoders.cdt.dsf.tutorial.timers.SpyTimersView"
             id="com.kichwacoders.cdt.dsf.tutorial.timers.spy.view"
             name="Timers Spy"
@@ -135,12 +136,67 @@
       </menuContribution>
    </extension>
    
+  
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
+            class="com.kichwacoders.cdt.dsf.tutorial.timers.solution.SpyTimersView"
+            id="com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.view"
+            name="Timers Spy - Solution"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.tutorial.timers.solution.SpyToggleHandler"
+            id="com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.tutorial.timers.spy.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
 
    
    
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
             class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.FrameSpyEventsView"
             id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.view"
             name="DSF-GDB Frame Spy with Events"
@@ -194,6 +250,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
             class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.FrameSpyEventsView"
             id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.view"
             name="DSF-GDB Frame Spy with Events - Solution"
@@ -248,6 +305,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
             class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.FrameSpyPollingView"
             id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view"
             name="DSF-GDB Frame Spy with Polling"
@@ -299,6 +357,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.kichwacoders.cdt.dsf.tutorial"
             class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.FrameSpyPollingView"
             id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.view"
             name="DSF-GDB Frame Spy with Polling - Solution"

@@ -79,6 +79,7 @@ public class FrameSpyPollingView extends ViewPart {
 	public void dispose() {
 		super.dispose();
 		fMenuManager.dispose();
+		cancelPollingJob();
 	}
 
 	public boolean getToggledState() {
@@ -91,7 +92,9 @@ public class FrameSpyPollingView extends ViewPart {
 		boolean oldState = getToggledState();
 		if (oldState != newState) {
 			// Display the new state to the user
-			fLogText.setText(Boolean.toString(newState));
+			if (!fLogText.isDisposed()) {
+				fLogText.setText(Boolean.toString(newState));
+			}
 
 			// Save the toggle state in a preference so that it's remembered
 			// next time the view is opened
@@ -109,7 +112,7 @@ public class FrameSpyPollingView extends ViewPart {
 	}
 
 	private void startPollingJob() {
-		fPollingJob = new Job("Frame Spy Polling Job") {
+		fPollingJob = new Job("Frame Spy Polling Job - Solution") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
@@ -200,6 +203,10 @@ public class FrameSpyPollingView extends ViewPart {
 								Display.getDefault().asyncExec(new Runnable() {
 									@Override
 									public void run() {
+										if (fLogText.isDisposed()) {
+											return;
+										}
+										
 										if (fLogText.getText().length() > MAX_LOG_SIZE) {
 											// Clear half the log when too big
 											fLogText.setText(fLogText.getText().substring(MAX_LOG_SIZE));
