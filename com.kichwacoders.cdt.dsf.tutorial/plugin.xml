@@ -189,6 +189,59 @@
       </menuContribution>
    </extension>
    
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.FrameSpyEventsView"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.view"
+            name="DSF-GDB Frame Spy with Events - Solution"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.FrameSpyEventsHandler"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
 
    
    
@@ -236,6 +289,57 @@
             locationURI="popup:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.view">
          <command
                commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.FrameSpyPollingView"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.view"
+            name="DSF-GDB Frame Spy with Polling - Solution"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.FrameSpyPollingHandler"
+            id="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.toggle"
+            name="Toggle Spy">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.view?after=additions">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.toggle"
+               icon="icons/enablespy.gif"
+               label="Toggle Spy"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.view">
+         <command
+               commandId="com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.polling.solution.toggle"
                icon="icons/enablespy.gif"
                label="Toggle Spy"
                style="push">

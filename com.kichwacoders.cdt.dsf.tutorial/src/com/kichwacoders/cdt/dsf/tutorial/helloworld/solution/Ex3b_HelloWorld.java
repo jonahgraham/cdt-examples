@@ -1,4 +1,11 @@
-package com.kichwacoders.cdt.dsf.tutorial.exercise;
+/*******************************************************************************
+ * Copyright (c) 2016 Kichwa Coders
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
+package com.kichwacoders.cdt.dsf.tutorial.helloworld.solution;
 
 import java.util.concurrent.Executor;
 
@@ -30,11 +37,11 @@ public class Ex3b_HelloWorld {
 		getHelloWorldMessage(new DataRequestMonitor<String>(executor, null) {
 			@Override
 			protected void handleSuccess() {
-				String helloMessage=""; //TODO: FIXME
+				String helloMessage = getData();
 				getCount(new DataRequestMonitor<Integer>(executor, null) {
 					@Override
 					protected void handleSuccess() {
-						int times=0; //TODO: FIXME
+						int times = getData();
 						System.out.println(helloMessage + " x " + times);
 					}
 				});

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Ericsson
+ * Copyright (c) 2016 Ericsson and others.
  *
  * All rights reserved. This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License v1.0 which
@@ -29,7 +29,7 @@ import com.kichwacoders.cdt.dsf.tutorial.internal.TutorialPlugin;
 
 public class SpyTimersView extends ViewPart {
 
-	private static final String TOGGLE_STATE_PREF_KEY = "toggle.state";
+	private static final String TOGGLE_STATE_PREF_KEY = SpyTimersView.class.getName() + ".toggle.state";
 	private MenuManager fMenuManager;
 	private StyledText fLogText;
 	private Job fPollingJob;

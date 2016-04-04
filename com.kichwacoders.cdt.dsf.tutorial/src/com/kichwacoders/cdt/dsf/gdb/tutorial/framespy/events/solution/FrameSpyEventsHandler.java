@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events;
+package com.kichwacoders.cdt.dsf.gdb.tutorial.framespy.events.solution;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

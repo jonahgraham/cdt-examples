@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Kichwa Coders
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
 package com.kichwacoders.cdt.dsf.tutorial.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -27,10 +34,6 @@ public class TutorialPlugin extends AbstractUIPlugin {
 	public TutorialPlugin() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -42,10 +45,6 @@ public class TutorialPlugin extends AbstractUIPlugin {
         getImageRegistry().put(IMG_REMOVE, imageDescriptorFromPlugin(PLUGIN_ID, IMG_REMOVE));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);

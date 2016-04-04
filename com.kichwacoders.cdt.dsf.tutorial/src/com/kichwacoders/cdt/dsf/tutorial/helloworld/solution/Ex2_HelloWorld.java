@@ -1,4 +1,11 @@
-package com.kichwacoders.cdt.dsf.tutorial.solutions;
+/*******************************************************************************
+ * Copyright (c) 2016 Kichwa Coders
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
+package com.kichwacoders.cdt.dsf.tutorial.helloworld.solution;
 
 import java.util.concurrent.Executor;
 
@@ -9,16 +16,16 @@ import org.eclipse.cdt.dsf.concurrent.ImmediateExecutor;
  * DSF Hello World Example
  * Data Request Monitor example
  */
-public class Ex2_HelloWorldAnswer {
+public class Ex2_HelloWorld {
 
 	private Executor executor;
 
-	private Ex2_HelloWorldAnswer() {
+	private Ex2_HelloWorld() {
 		executor = ImmediateExecutor.getInstance();
 	}
 
 	public static void main(String[] args) {
-		Ex2_HelloWorldAnswer helloWorld = new Ex2_HelloWorldAnswer();
+		Ex2_HelloWorld helloWorld = new Ex2_HelloWorld();
 		helloWorld.execute();
 	}
 

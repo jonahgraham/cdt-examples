@@ -1,4 +1,11 @@
-package com.kichwacoders.cdt.dsf.tutorial.solutions;
+/*******************************************************************************
+ * Copyright (c) 2016 Kichwa Coders
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
+package com.kichwacoders.cdt.dsf.tutorial.helloworld;
 
 import java.util.concurrent.Executor;
 
@@ -9,16 +16,16 @@ import org.eclipse.cdt.dsf.concurrent.ImmediateExecutor;
  * DSF Hello World Example
  * Combining different async methods
  */
-public class Ex3b_HelloWorldAnswer {
+public class Ex3b_HelloWorld {
 
 	private Executor executor;
 
-	private Ex3b_HelloWorldAnswer() {
+	private Ex3b_HelloWorld() {
 		executor = ImmediateExecutor.getInstance();
 	}
 
 	public static void main(String[] args) {
-		Ex3b_HelloWorldAnswer helloWorld = new Ex3b_HelloWorldAnswer();
+		Ex3b_HelloWorld helloWorld = new Ex3b_HelloWorld();
 		helloWorld.execute();
 	}
 
@@ -30,11 +37,11 @@ public class Ex3b_HelloWorldAnswer {
 		getHelloWorldMessage(new DataRequestMonitor<String>(executor, null) {
 			@Override
 			protected void handleSuccess() {
-				String helloMessage = getData();
+				String helloMessage=""; //TODO: FIXME
 				getCount(new DataRequestMonitor<Integer>(executor, null) {
 					@Override
 					protected void handleSuccess() {
-						int times = getData();
+						int times=0; //TODO: FIXME
 						System.out.println(helloMessage + " x " + times);
 					}
 				});

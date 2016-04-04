@@ -1,4 +1,11 @@
-package com.kichwacoders.cdt.dsf.tutorial.solutions;
+/*******************************************************************************
+ * Copyright (c) 2016 Kichwa Coders
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *******************************************************************************/
+package com.kichwacoders.cdt.dsf.tutorial.helloworld;
 
 import java.util.concurrent.Executor;
 
@@ -9,16 +16,16 @@ import org.eclipse.cdt.dsf.concurrent.RequestMonitor;
  * DSF Hello World Example
  * Nested async methods
  */
-public class Ex3a_HelloWorldAnswer {
+public class Ex3a_HelloWorld {
 
 	private Executor executor;
 
-	private Ex3a_HelloWorldAnswer() {
+	private Ex3a_HelloWorld() {
 		executor = ImmediateExecutor.getInstance();
 	}
 
 	public static void main(String[] args) {
-		Ex3a_HelloWorldAnswer helloWorld = new Ex3a_HelloWorldAnswer();
+		Ex3a_HelloWorld helloWorld = new Ex3a_HelloWorld();
 		helloWorld.execute();
 	}
 
@@ -36,11 +43,13 @@ public class Ex3a_HelloWorldAnswer {
 	}
 
 	private void printHelloWorld(RequestMonitor rm) {
-		printHello("World", new RequestMonitor(executor, rm));
+		RequestMonitor rm2 = new RequestMonitor(executor, rm);
+		printHello("World", rm2);
+		rm.done();
 	}
 
 	private void printHello(String who, RequestMonitor rm) {
 		System.out.println("Hello, " + who);
-		rm.done();
+//		rm.done();
 	}
 }
